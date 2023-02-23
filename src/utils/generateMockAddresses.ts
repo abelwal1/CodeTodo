@@ -22,6 +22,29 @@ const streetNumberToStreetMapping = {
   9: "Red Centre Way",
 };
 
+const generateMockAddress = (
+  postcode: string,
+  streetNumber: string,
+  postcodeMapping: string,
+  streetMapping: string
+) => {
+  let arr=[];
+  for(let i=0; i< 5; i++){
+    arr.push(
+      {
+        id: i,
+        city: postcodeMapping,
+        houseNumber: `${i}`,
+        postcode,
+        street: `${streetNumber} ${streetMapping}`,
+        lat: Math.random(),
+        long: Math.random(),
+      }
+    );
+  }
+  return arr;
+};
+
 const generateMockAddresses = (postcode: string, streetNumber: string) => {
   const postcodeFirstChar = parseInt(postcode.substring(0, 1));
   const streetNumberFirstChar = parseInt(streetNumber.substring(0, 1));
@@ -33,32 +56,13 @@ const generateMockAddresses = (postcode: string, streetNumber: string) => {
   ];
 
   if (postcodeMapping) {
-    return [
-      {
-        city: postcodeMapping,
-        houseNumber: "1",
-        postcode,
-        street: `${streetNumber} ${streetMapping}`,
-        lat: Math.random(),
-        long: Math.random(),
-      },
-      {
-        city: postcodeMapping,
-        houseNumber: "2",
-        postcode,
-        street: `${streetNumber} ${streetMapping}`,
-        lat: Math.random(),
-        long: Math.random(),
-      },
-      {
-        city: postcodeMapping,
-        houseNumber: "3",
-        postcode,
-        street: `${streetNumber} ${streetMapping}`,
-        lat: Math.random(),
-        long: Math.random(),
-      },
-    ];
+    const address = generateMockAddress(
+      postcode,
+      streetNumber,
+      postcodeMapping,
+      streetMapping
+    );
+    return address.filter((x) => x.houseNumber === streetNumber);
   }
 
   return null;
