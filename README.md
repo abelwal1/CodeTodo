@@ -30,8 +30,8 @@ Here is a list of all the TODO's to make life a bit easier:
 - [D ] Add conditional classNames for `primary` and `secondary` variant in `<Button />` component
 
 ### Redux
-- [ ] Prevent duplicate addresses.
-- [ ] Write a state update which removes an address from the addresses array.
+- [D ] Prevent duplicate addresses.
+- [D ] Write a state update which removes an address from the addresses array.
 
 ### Bonus
 - [D ] Refactor the code in pages/api/getAddresses so that there is no duplication of logic for street number and postcode digit checking
