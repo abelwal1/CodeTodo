@@ -8,6 +8,8 @@ import Radio from "./ui/components/Radio/Radio";
 import Section from "./ui/components/Section/Section";
 import transformAddress from "./core/models/address";
 import useAddressBook from "./ui/hooks/useAddressBook";
+import getAddresses from "../pages/api/getAddresses";
+import { buttonClassType } from "./utils/constant";
 
 import * as styles from "../styles/App.module.css";
 
@@ -58,23 +60,36 @@ function App() {
      * - Make sure to add the houseNumber to each found address in the response using `transformAddress()` function
      * - Bonus: Add a loading state in the UI while fetching addresses
      */
+    const res = await fetch(
+      `/api/getAddresses?postcode=${postCode}&streetnumber=${houseNumber}`
+    );
+    const data = await res.json();
+    setAddresses(data.details);
   };
 
   const handlePersonSubmit = (e) => {
     e.preventDefault();
-
     if (!selectedAddress || !addresses.length) {
       setError(
         "No address selected, try to select an address or find one if you haven't"
       );
       return;
     }
+    const foundAddress = addresses.find((add) => add.id == selectedAddress);
+    if (firstName && lastName) {
+      addAddress({ ...foundAddress, firstName, lastName });
+    } else {
+      setError(`Enter ${firstName ? "last" : "first"} name`);
+    }
+  };
 
-    const foundAddress = addresses.find(
-      (address) => address.id === selectedAddress
-    );
-
-    addAddress({ ...foundAddress, firstName, lastName });
+  const handleClearFormFields = () => {
+    setPostCode("");
+    setHouseNumber("");
+    setFirstName("");
+    setLastName("");
+    setSelectedAddress("");
+    setAddresses("");
   };
 
   return (
@@ -107,11 +122,13 @@ function App() {
                 placeholder="House number"
               />
             </div>
-            <Button type="submit">Find</Button>
+            <Button type="submit" variant={buttonClassType.primary}>
+              Find
+            </Button>
           </fieldset>
         </form>
-        {addresses.length > 0 &&
-          addresses.map((address) => {
+        {addresses?.length > 0 &&
+          addresses?.map((address) => {
             return (
               <Radio
                 name="selectedAddress"
@@ -144,7 +161,9 @@ function App() {
                   value={lastName}
                 />
               </div>
-              <Button type="submit">Add to addressbook</Button>
+              <Button type="submit" variant={buttonClassType.secondary}>
+                Add to addressbook
+              </Button>
             </fieldset>
           </form>
         )}
@@ -153,6 +172,13 @@ function App() {
         {error && <div className="error">{error}</div>}
 
         {/* TODO: Add a button to clear all form fields. Button must look different from the default primary button, see design. */}
+        <Button
+          type="submit"
+          variant={buttonClassType.default}
+          onClick={handleClearFormFields}
+        >
+          Clear all fields
+        </Button>
       </Section>
 
       <Section variant="dark">

@@ -31,6 +31,8 @@ code {
   --width-input: 20rem;
   --width-content: 30rem;
   --font-primary: Roboto;
+  --default-color: #ffffff;
+  --default-font-color: #040355;
   --primary-color: #0d520b;
   --primary-font-color: #cecdfd;
   --secondary-color: #3458b9;
